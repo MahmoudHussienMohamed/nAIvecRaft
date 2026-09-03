@@ -1,10 +1,11 @@
-
+import time
 import turtle
 from Player import Player
 
 main_window = turtle.Screen()
 main_window.title("falling hearts")
 main_window.setup(width=1000, height=1000)
+main_window.tracer(0)
 
 player = Player(speed=7)
 
@@ -24,5 +25,12 @@ canvas = main_window.getcanvas()
 canvas.bind("<KeyRelease-Left>", player.stop)
 canvas.bind("<KeyRelease-Right>", player.stop)
 
+while True:
+
+    player.vibrate()
+
+    main_window.update()
+
+    time.sleep(1 / 60)
 
 main_window.mainloop()

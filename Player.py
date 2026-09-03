@@ -1,6 +1,8 @@
-from enum import Enum
 import os
+import random
 import turtle
+from math import sin
+from enum import Enum
 
 IMGS_DIR = os.path.abspath('./assets')
 AIRCRAFTS_DIR = os.path.join(IMGS_DIR, 'aircrafts')
@@ -21,6 +23,8 @@ class Player:
         DOWN    =  0
 
     def __init__(self, imgs_dir: str = PLAYER_DIR, speed: float = SPEED):
+        self.boundry = 270
+        self.frame = 0
         self.init_img_paths(imgs_dir)
         self.init_lookups()
         self.speed = speed
@@ -62,18 +66,18 @@ class Player:
         self.turtle.shape(self.normal)
         self.turtle.speed(0)
         self.turtle.penup()
-        self.turtle.goto(0, -270)
+        self.turtle.goto(0, -self.boundry)
     
     def move_left(self):
         self.handle_shape_change(Player.Movement.LEFT)
         x = self.turtle.xcor()
-        x = max(x - SPEED, -270)
+        x = max(x - SPEED, -self.boundry)
         self.turtle.setx(x)
 
     def move_right(self):
         self.handle_shape_change(Player.Movement.RIGHT)
         x = self.turtle.xcor()
-        x = min(x + SPEED, 270)
+        x = min(x + SPEED, self.boundry)
         self.turtle.setx(x)
 
     def stop(self, *args, **kwargs):
@@ -105,3 +109,10 @@ class Player:
         shape = self.get_img_from(shift)
 
         self.turtle.shape(shape)
+
+    def vibrate(self):
+        self.frame += 1
+        y_shake = sin(self.frame * 0.8) * 1.5
+        self.turtle.sety(-self.boundry + y_shake)
+        x_shake = y_shake * 0.5
+        self.turtle.setx(self.turtle.xcor() + x_shake)
