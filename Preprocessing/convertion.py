@@ -7,6 +7,9 @@ PLAYER_DIR = os.path.join(AIRCRAFTS_DIR, 'player')
 ENEMY_DIR = os.path.join(AIRCRAFTS_DIR, 'enemy')
 ENV_DIR = os.path.join(IMG_DIR, 'environment')
 CLOUDS_DIR = os.path.join(ENV_DIR, 'clouds')
+LANDS_DIR = os.path.join(ENV_DIR, 'lands')
+WAVES_DIR = os.path.join(ENV_DIR, 'waves')
+LIGHT_WAVES_DIR = os.path.join(WAVES_DIR, 'light')
 
 def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
     img = Image.open(img_path).convert("RGBA")
@@ -16,9 +19,9 @@ def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
 
     img = img.resize(
         (new_width, new_height),
-        # Image.Resampling.LANCZOS
+        Image.Resampling.LANCZOS
         # Image.Resampling.BICUBIC
-        Image.Resampling.BILINEAR
+        # Image.Resampling.BILINEAR
     )
 
     # Create transparent background
@@ -50,28 +53,45 @@ def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
         transparency=0
     )
 
-pngs = [png for png in os.listdir(PLAYER_DIR) if png.endswith('.png')]
+# pngs = [png for png in os.listdir(PLAYER_DIR) if png.endswith('.png')]
 
-for png in pngs:
-    input_file = os.path.join(PLAYER_DIR, png)
-    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
-    output_file = os.path.join(PLAYER_DIR, output_file)
-    convert_to_gif(input_file, output_file, 0.7)
-
-#####################################################################
-pngs = [png for png in os.listdir(ENEMY_DIR) if png.endswith('.png')]
-
-for png in pngs:
-    input_file = os.path.join(ENEMY_DIR, png)
-    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
-    output_file = os.path.join(ENEMY_DIR, output_file)
-    convert_to_gif(input_file, output_file, 0.6)
+# for png in pngs:
+#     input_file = os.path.join(PLAYER_DIR, png)
+#     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+#     output_file = os.path.join(PLAYER_DIR, output_file)
+#     convert_to_gif(input_file, output_file, 0.7)
 
 #####################################################################
-pngs = [png for png in os.listdir(CLOUDS_DIR) if png.endswith('.png')]
+# pngs = [png for png in os.listdir(ENEMY_DIR) if png.endswith('.png')]
 
-for png in pngs:
-    input_file = os.path.join(CLOUDS_DIR, png)
-    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
-    output_file = os.path.join(CLOUDS_DIR, output_file)
-    convert_to_gif(input_file, output_file, 0.5)
+# for png in pngs:
+#     input_file = os.path.join(ENEMY_DIR, png)
+#     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+#     output_file = os.path.join(ENEMY_DIR, output_file)
+#     convert_to_gif(input_file, output_file, 0.6)
+
+#####################################################################
+# pngs = [png for png in os.listdir(LANDS_DIR) if png.endswith('.png')]
+
+# for png in pngs:
+#     input_file = os.path.join(LANDS_DIR, png)
+#     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+#     output_file = os.path.join(LANDS_DIR, output_file)
+#     convert_to_gif(input_file, output_file)
+#####################################################################
+
+# pngs = [png for png in os.listdir(WAVES_DIR) if png.endswith('.png')]
+
+# for png in pngs:
+#     input_file = os.path.join(WAVES_DIR, png)
+#     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+#     output_file = os.path.join(WAVES_DIR, output_file)
+#     convert_to_gif(input_file, output_file, 0.5)
+
+# pngs = [png for png in os.listdir(LIGHT_WAVES_DIR) if png.endswith('.png')]
+
+# for png in pngs:
+#     input_file = os.path.join(LIGHT_WAVES_DIR, png)
+#     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+#     output_file = os.path.join(LIGHT_WAVES_DIR, output_file)
+#     convert_to_gif(input_file, output_file, 1)
