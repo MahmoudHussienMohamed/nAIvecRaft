@@ -86,13 +86,12 @@ class Player:
         current = self.get_current_shape()
         current_movt = self.get_movement_from(current)
         shift = movement.value
+
         if movement in (Player.Movement.UP, Player.Movement.DOWN):
             shift = -current_movt
-
         elif movement == Player.Movement.LEFT:
             if current == self.left1:
                 shift *= 2
-
         elif movement == Player.Movement.RIGHT:
             if current == self.right1:
                 shift *= 2
