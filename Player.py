@@ -8,10 +8,6 @@ IMGS_DIR = os.path.abspath('./assets')
 AIRCRAFTS_DIR = os.path.join(IMGS_DIR, 'aircrafts')
 PLAYER_DIR = os.path.join(AIRCRAFTS_DIR, 'player')
 
-LEFT_PATH = os.path.join(PLAYER_DIR, 'left1.gif')
-RIGHT_PATH = os.path.join(PLAYER_DIR, 'right1.gif')
-NORMAL_PATH = os.path.join(PLAYER_DIR, 'normal.gif')
-
 SPEED = 5
 
 class Player:
@@ -71,13 +67,13 @@ class Player:
     def move_left(self):
         self.handle_shape_change(Player.Movement.LEFT)
         x = self.turtle.xcor()
-        x = max(x - SPEED, -self.boundry)
+        x = max(x - self.speed, -self.boundry)
         self.turtle.setx(x)
 
     def move_right(self):
         self.handle_shape_change(Player.Movement.RIGHT)
         x = self.turtle.xcor()
-        x = min(x + SPEED, self.boundry)
+        x = min(x + self.speed, self.boundry)
         self.turtle.setx(x)
 
     def stop(self, *args, **kwargs):
