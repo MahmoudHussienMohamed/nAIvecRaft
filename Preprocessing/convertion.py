@@ -4,6 +4,9 @@ import os
 IMG_DIR = os.path.abspath('./assets')
 AIRCRAFTS_DIR = os.path.join(IMG_DIR, 'aircrafts')
 PLAYER_DIR = os.path.join(AIRCRAFTS_DIR, 'player')
+ENEMY_DIR = os.path.join(AIRCRAFTS_DIR, 'enemy')
+ENV_DIR = os.path.join(IMG_DIR, 'environment')
+CLOUDS_DIR = os.path.join(ENV_DIR, 'clouds')
 
 def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
     img = Image.open(img_path).convert("RGBA")
@@ -54,3 +57,21 @@ for png in pngs:
     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
     output_file = os.path.join(PLAYER_DIR, output_file)
     convert_to_gif(input_file, output_file, 0.7)
+
+#####################################################################
+pngs = [png for png in os.listdir(ENEMY_DIR) if png.endswith('.png')]
+
+for png in pngs:
+    input_file = os.path.join(ENEMY_DIR, png)
+    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+    output_file = os.path.join(ENEMY_DIR, output_file)
+    convert_to_gif(input_file, output_file, 0.6)
+
+#####################################################################
+pngs = [png for png in os.listdir(CLOUDS_DIR) if png.endswith('.png')]
+
+for png in pngs:
+    input_file = os.path.join(CLOUDS_DIR, png)
+    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+    output_file = os.path.join(CLOUDS_DIR, output_file)
+    convert_to_gif(input_file, output_file, 0.5)
