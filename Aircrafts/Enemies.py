@@ -12,7 +12,7 @@ class Enemies:
     def __init__(self, screen: turtle._Screen, count: int = 5, speed: int = SPEED):
         self.screen  = screen
         self.speed   = speed
-        self.enemies = []
+        self.enemies: list[Enemy] = []
         self.padding = 30
 
         self.width, self.height = Image.open(os.path.join(_ENEMY_IMG, 'normal.gif')).size
@@ -117,3 +117,7 @@ class Enemies:
                     enemy.turtle.setx(x)
 
                 enemy.turtle.sety(y)
+
+    def vibrate(self):
+        for enemy in self.enemies:
+            enemy.vibrate()

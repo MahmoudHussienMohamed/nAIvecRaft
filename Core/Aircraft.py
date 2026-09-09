@@ -74,6 +74,6 @@ class Aircraft(AnimationEntity):
     def vibrate(self):
         self.frame += 1
         y_shake = sin(self.frame * 0.8) * 1.5
-        self.turtle.sety(self.defy + y_shake)
+        self.turtle.sety(self.y + y_shake)
         x_shake = y_shake * 0.5
         self.turtle.setx(self.turtle.xcor() + x_shake)
