@@ -68,12 +68,12 @@ class AnimationEntity:
     def return_to_default(self):
         self.goto(self.defx, self.defy)
 
-    def is_collided_with(self, other: 'AnimationEntity'):
+    def is_collided_with(self, other: 'AnimationEntity', tolerance: int = 0):
         non_overlapping = (
-            self.left > other.right or  # self is completely on the right side of other
-            self.right < other.left or  # self is completely on the left side of other
-            self.top < other.bottom or  # self is completely under other
-            self.bottom > other.top     # self is completely above other
+            self.left + tolerance > other.right or  # self is completely on the right side of other
+            self.right - tolerance < other.left or  # self is completely on the left side of other
+            self.top - tolerance < other.bottom or  # self is completely under other
+            self.bottom + tolerance > other.top     # self is completely above other
         )
         return not non_overlapping
 
