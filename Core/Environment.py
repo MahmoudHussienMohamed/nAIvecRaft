@@ -1,7 +1,7 @@
 import random
 import turtle
 from PIL import Image
-from Core.AnimationEntity import AnimationEntity
+from .AnimationEntity import AnimationEntity
 
 
 class Environment(AnimationEntity):

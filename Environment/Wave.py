@@ -1,6 +1,6 @@
 import os
 import random
-from Environment import Environment
+from Core.Environment import Environment
 
 IMGS_DIR        = os.path.abspath('./assets')
 LIGHT_WAVES_DIR = os.path.join(IMGS_DIR, 'environment', 'waves', 'light')
