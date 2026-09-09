@@ -3,7 +3,7 @@ import random
 import turtle
 from PIL import Image
 
-from Aircraft import Aircraft, AIRCRAFTS_DIR, SPEED
+from Core import Aircraft, AIRCRAFTS_DIR, SPEED
 
 ENEMY_DIR  = 'enemy'
 _ENEMY_IMG = os.path.join(AIRCRAFTS_DIR, ENEMY_DIR)

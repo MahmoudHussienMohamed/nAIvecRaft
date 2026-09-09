@@ -1,6 +1,6 @@
 import os
 import turtle
-from Aircraft import Aircraft, SPEED
+from Core import Aircraft, SPEED
 
 PLAYER_DIR = 'player'
 

@@ -2,7 +2,7 @@ import os
 import turtle
 from math import sin
 from enum import Enum
-from AnimationEntity import AnimationEntity
+from .AnimationEntity import AnimationEntity
 
 IMGS_DIR = os.path.abspath('./assets')
 AIRCRAFTS_DIR = os.path.join(IMGS_DIR, 'aircrafts')
