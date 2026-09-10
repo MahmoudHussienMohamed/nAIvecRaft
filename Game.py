@@ -167,6 +167,13 @@ class Game:
 
     def play(self):
         while True:
+
+            self.waves.move_down()
+            self.land.move_down()
+            self.clouds.move_down()
+            self.enemies.move_down()
+            self.enemies.vibrate()
+
             if self.game_over:
                 self.win.update()
                 time.sleep(1 / 60)
@@ -174,13 +181,8 @@ class Game:
 
             self.score += 1
 
-            self.waves.move_down()
-            self.land.move_down()
-            self.clouds.move_down()
-            self.enemies.move_down()
             self._update_player()
             self.player.vibrate()
-            self.enemies.vibrate()
             self.bullets.tick()
             self.bullets.move_up()
             self.bullets.clean()
