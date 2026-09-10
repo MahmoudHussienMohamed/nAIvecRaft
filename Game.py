@@ -1,16 +1,13 @@
 import os
 import time
 import turtle
-
 from Aircrafts.Bullet import Bullet
-from Environment.Cloud import Cloud, CLOUDS_PATHS
-# from Player import Player
-# from Enemy import Enemies
+from Environment.Cloud import Cloud
 from Aircrafts import Bullets, Enemy, Player, Enemies
 from HUD import HUD
-from Environment.Land import Land, LANDS_PATHS
-from Environment.Explosions import Explosion, EXPLOSIONS_PATHS
-from Environment.Wave import Wave, WAVE_FRAMES
+from Environment.Land import Land
+from Environment.Explosions import Explosions
+from Environment.Wave import Wave
 
 TITLE    = "nAIvecRaft"
 WATER_BG = "#4779B2"
@@ -29,6 +26,7 @@ class Game:
         self.invincible_timer = 0
         self.game_over        = False
         self.bullets          = Bullets(self.win)
+        self.explosions       = Explosions(self.win)
 
     def _init_screen(self, width: int, height: int):
         self.win = turtle.Screen()
@@ -37,41 +35,22 @@ class Game:
         self.win.setup(width=width, height=height)
         self.win.tracer(0)
 
-    # ------------------------------------------------------------------ setup
-
     def setup(self):
-        # Wave/Cloud/Land manage raw turtles — register shapes manually
-        # for shape in WAVE_FRAMES:
-        #     self.win.register_shape(shape)
-        # for shape in EXPLOSIONS_PATHS:
-        #     self.win.register_shape(shape)
-        # for shape in LANDS_PATHS:
-        #     self.win.register_shape(shape)
-        # for shape in CLOUDS_PATHS:
-        #     self.win.register_shape(shape)
-
-        # Instantiation order = z-order (later = on top)
-        # Player and Enemies auto-register their shapes via AnimationEntity
         self.waves   = Wave(self.win, 10)
         self.land    = Land(self.win)
-        self.explosion = Explosion(self.win)
         self.clouds  = Cloud(self.win, 5)
         self.enemies = Enemies(self.win, count=5)
         self.player  = Player(self.win, speed=8)
 
-        # HUD always last so text renders above all sprites
         self.hud = HUD(max_lives=self.MAX_LIVES)
         self.hud.update(self.score, self.lives)
 
         self._bind_events()
 
-    # --------------------------------------------------------------- controls
-
     def create_bullet(self):
         x = self.player.x
         y = self.player.top
         self.bullets.add(x, y)
-        # self.bullet = Bullet(self.win, x, y)
 
     def _bind_events(self):
         self.win.listen()
@@ -95,8 +74,6 @@ class Game:
     def _quit(self):
         self.win.bye()
 
-    # ------------------------------------------------------------ game logic
-
     def _check_collisions(self):
         if self.invincible_timer > 0:
             return
@@ -111,6 +88,7 @@ class Game:
                 return
 
     def on_enemy_shot(self, enemy: Enemy, bullet: Bullet):
+        self.explosions.add(enemy.x, enemy.y, enemy.speed)
         enemy.hide()
         self.bullets.remove([bullet])
 
@@ -135,10 +113,9 @@ class Game:
         else:
             self.player.turtle.showturtle()
 
-    # ------------------------------------------------------------------- loop
-
     def play(self):
         while True:
+            print(f'{len(self.explosions.explosions)=}, {len(self.bullets.bullets)=}')
             if self.game_over:
                 self.win.update()
                 time.sleep(1 / 60)
@@ -148,13 +125,14 @@ class Game:
 
             self.waves.move_down()
             self.land.move_down()
-            self.explosion.move_down()
             self.clouds.move_down()
             self.enemies.move_down()
             self.player.vibrate()
             self.enemies.vibrate()
             self.bullets.move_up()
             self.bullets.clean()
+            self.explosions.move_down()
+            self.explosions.clean()
 
             self._tick_invincibility()
             self._check_collisions()

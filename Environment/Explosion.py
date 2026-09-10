@@ -15,11 +15,14 @@ class Explosion(AnimationEntity):
         self.current = 0
         super().__init__(screen, EXPLOSIONS_PATHS[0], default_x, default_y, speed, possible_images=EXPLOSIONS_PATHS)
 
-    def move_up(self, dist: int = None):
+    def move_down(self, dist: int = None):
         self.cnt += 1
         dist = dist or self.speed
-        self.turtle.sety(self.y + dist)
+        self.turtle.sety(self.y - dist)
         if self.cnt >= self.fps:
             self.current = (self.current + 1) % EXPLOSIONS_FRAMES_NO
             self.update_image(EXPLOSIONS_PATHS[self.current])
             self.cnt = 0
+
+    def is_done(self):
+        return self.current == EXPLOSIONS_FRAMES_NO - 1 and self.cnt == self.fps -1
