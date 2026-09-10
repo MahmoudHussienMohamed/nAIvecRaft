@@ -2,11 +2,11 @@ import os
 import time
 import turtle
 
-from Environment.Bullet import Bullet
+from Aircrafts.Bullet import Bullet
 from Environment.Cloud import Cloud, CLOUDS_PATHS
 # from Player import Player
 # from Enemy import Enemies
-from Aircrafts import Player, Enemies
+from Aircrafts import Bullets, Enemy, Player, Enemies
 from HUD import HUD
 from Environment.Land import Land, LANDS_PATHS
 from Environment.Explosions import Explosion, EXPLOSIONS_PATHS
@@ -28,6 +28,7 @@ class Game:
         self.score            = 0
         self.invincible_timer = 0
         self.game_over        = False
+        self.bullets          = Bullets(self.win)
 
     def _init_screen(self, width: int, height: int):
         self.win = turtle.Screen()
@@ -54,7 +55,6 @@ class Game:
         self.waves   = Wave(self.win, 10)
         self.land    = Land(self.win)
         self.explosion = Explosion(self.win)
-        self.bullet = Bullet(self.win)
         self.clouds  = Cloud(self.win, 5)
         self.enemies = Enemies(self.win, count=5)
         self.player  = Player(self.win, speed=8)
@@ -67,6 +67,12 @@ class Game:
 
     # --------------------------------------------------------------- controls
 
+    def create_bullet(self):
+        x = self.player.x
+        y = self.player.top
+        self.bullets.add(x, y)
+        # self.bullet = Bullet(self.win, x, y)
+
     def _bind_events(self):
         self.win.listen()
         self.win.onkeypress(self.player.move_left,  'Left')
@@ -74,6 +80,7 @@ class Game:
         self.win.onkeypress(self.player.stop,       'Up')
         self.win.onkeypress(self.player.stop,       'Down')
         self.win.onkeypress(self._quit,             'q')
+        self.win.onkeypress(self.create_bullet,     'space')
 
         canvas = self.win.getcanvas()
         canvas.bind("<KeyRelease-Left>",  self.player.stop)
@@ -94,16 +101,25 @@ class Game:
         if self.invincible_timer > 0:
             return
         for enemy in self.enemies.enemies:
+            if not enemy.is_visible(): # enemy shot
+                continue
+            for bullet in self.bullets.bullets:
+                if bullet.is_collided_with(enemy):
+                    self.on_enemy_shot(enemy, bullet)
             if self.player.is_collided_with(enemy, COLLISION_TOLERANCE):
                 self._on_hit()
                 return
+
+    def on_enemy_shot(self, enemy: Enemy, bullet: Bullet):
+        enemy.hide()
+        self.bullets.remove([bullet])
 
     def _on_hit(self):
         self.lives -= 1
         self.hud.update(self.score, self.lives)
         if self.lives <= 0:
             self.game_over = True
-            self.player.turtle.hideturtle()
+            self.player.hide()
             self._unbind_movement()
             self.hud.show_game_over(self.score)
         else:
@@ -115,7 +131,7 @@ class Game:
             return
         self.invincible_timer -= 1
         if self.invincible_timer % 6 < 3:
-            self.player.turtle.hideturtle()
+            self.player.hide()
         else:
             self.player.turtle.showturtle()
 
@@ -133,11 +149,12 @@ class Game:
             self.waves.move_down()
             self.land.move_down()
             self.explosion.move_down()
-            self.bullet.move_down()
             self.clouds.move_down()
             self.enemies.move_down()
             self.player.vibrate()
             self.enemies.vibrate()
+            self.bullets.move_up()
+            self.bullets.clean()
 
             self._tick_invincibility()
             self._check_collisions()

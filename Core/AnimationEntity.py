@@ -77,6 +77,15 @@ class AnimationEntity:
         )
         return not non_overlapping
 
+    def show(self):
+        self.turtle.showturtle()
+
+    def hide(self):
+        self.turtle.hideturtle()
+
+    def is_visible(self):
+        return self.turtle.isvisible()
+
     @property
     def x(self):
         '''Object's middle point's x-coordinate'''

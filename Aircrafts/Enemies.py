@@ -91,6 +91,8 @@ class Enemies:
             y = enemy.y - enemy.speed
 
             if y + self.height // 2 < -500:
+                if not enemy.is_visible(): # enemy shot
+                    enemy.show()
                 x, spawn_y = self.find_spawn_position(enemy)
                 self._randomize(enemy)
                 enemy.goto(x, spawn_y)
