@@ -1,4 +1,3 @@
-import os
 import time
 import turtle
 from Aircrafts.Bullet import Bullet
@@ -24,8 +23,9 @@ class Game:
         self.score            = 0
         self.invincible_timer = 0
         self.game_over        = False
-        self.bullets          = Bullets(self.win)
-        self.explosions       = Explosions(self.win)
+        self.bullets    = Bullets(self.win)
+        self.explosions = Explosions(self.win)
+        self.keys = set()
 
     def _init_screen(self, width: int, height: int):
         self.win = turtle.Screen()
@@ -38,7 +38,7 @@ class Game:
         self.waves   = Wave(self.win, 10)
         self.land    = Land(self.win)
         self.clouds  = Cloud(self.win, 5)
-        self.enemies = Enemies(self.win, count=5)
+        self.enemies = Enemies(self.win, count=7)
         self.player  = Player(self.win, speed=8)
 
         self.hud = HUD(max_lives=self.MAX_LIVES)
@@ -51,22 +51,66 @@ class Game:
 
     def _bind_events(self):
         self.win.listen()
-        self.win.onkeypress(self.player.move_left,  'Left')
-        self.win.onkeypress(self.player.move_right, 'Right')
-        self.win.onkeypress(self.player.stop,       'Up')
-        self.win.onkeypress(self.player.stop,       'Down')
-        self.win.onkeypress(self._quit,             'q')
-        self.win.onkeypress(self.create_bullet,     'space')
 
         canvas = self.win.getcanvas()
-        canvas.bind("<KeyRelease-Left>",  self.player.stop)
-        canvas.bind("<KeyRelease-Right>", self.player.stop)
 
-        self.win.listen()
+        canvas.bind(
+            "<KeyPress-Left>",
+            lambda event: self.keys.add("Left")
+        )
+        canvas.bind(
+            "<KeyPress-Right>",
+            lambda event: self.keys.add("Right")
+        )
 
-    def _unbind_movement(self):
-        for key in ('Left', 'Right', 'Up', 'Down'):
-            self.win.onkeypress(None, key)
+        canvas.bind(
+            "<KeyRelease-Left>",
+            lambda event: self.keys.discard("Left")
+        )
+        canvas.bind(
+            "<KeyRelease-Right>",
+            lambda event: self.keys.discard("Right")
+        )
+
+        canvas.bind(
+            "<KeyPress-Up>",
+            lambda event: self.keys.add("Up")
+        )
+        canvas.bind(
+            "<KeyPress-Down>",
+            lambda event: self.keys.add("Down")
+        )
+
+        canvas.bind(
+            "<KeyRelease-Up>",
+            lambda event: self.keys.discard("Up")
+        )
+        canvas.bind(
+            "<KeyRelease-Down>",
+            lambda event: self.keys.discard("Down")
+        )
+
+        canvas.bind(
+            "<KeyPress-space>",
+            lambda event: self.keys.add("Space")
+        )
+        canvas.bind(
+            "<KeyRelease-space>",
+            lambda event: self.keys.discard("Space")
+        )
+
+        self.win.onkeypress(self._quit, 'q')
+
+    def _update_player(self):
+        if "Left" in self.keys:
+            self.player.move_left()
+        elif "Right" in self.keys:
+            self.player.move_right()
+        else:
+            self.player.stop()
+
+        if "Space" in self.keys:
+            self.create_bullet()
 
     def _quit(self):
         self.win.bye()
@@ -74,12 +118,15 @@ class Game:
     def _check_collisions(self):
         if self.invincible_timer > 0:
             return
+
         for enemy in self.enemies.enemies:
             if not enemy.is_visible():
                 continue
+
             for bullet in self.bullets.bullets:
                 if bullet.is_collided_with(enemy):
                     self.on_enemy_shot(enemy, bullet)
+
             if self.player.is_collided_with(enemy, COLLISION_TOLERANCE):
                 self._on_hit()
                 return
@@ -88,16 +135,20 @@ class Game:
         self.explosions.add(enemy.x, enemy.y, enemy.speed)
         enemy.hide()
         self.bullets.remove([bullet])
+
         self.score += self.SCORE_PER_KILL
         self.hud.update(self.score, self.lives)
 
     def _on_hit(self):
         self.lives -= 1
         self.hud.update(self.score, self.lives)
+
         if self.lives <= 0:
             self.game_over = True
+
+            self.keys.clear()
+
             self.player.hide()
-            self._unbind_movement()
             self.hud.show_game_over(self.score)
         else:
             self.invincible_timer = self.INVINCIBLE_FRAMES
@@ -106,7 +157,9 @@ class Game:
         if self.invincible_timer <= 0:
             self.player.show()
             return
+
         self.invincible_timer -= 1
+
         if self.invincible_timer % 6 < 3:
             self.player.hide()
         else:
@@ -125,6 +178,7 @@ class Game:
             self.land.move_down()
             self.clouds.move_down()
             self.enemies.move_down()
+            self._update_player()
             self.player.vibrate()
             self.enemies.vibrate()
             self.bullets.tick()
