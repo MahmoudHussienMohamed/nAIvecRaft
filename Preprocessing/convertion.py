@@ -10,7 +10,7 @@ CLOUDS_DIR = os.path.join(ENV_DIR, 'clouds')
 LANDS_DIR = os.path.join(ENV_DIR, 'lands')
 WAVES_DIR = os.path.join(ENV_DIR, 'waves')
 LIGHT_WAVES_DIR = os.path.join(WAVES_DIR, 'light')
-
+PROJECTILES_DIR = os.path.join(IMG_DIR, 'projectiles')
 def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
     img = Image.open(img_path).convert("RGBA")
 
@@ -95,3 +95,11 @@ def convert_to_gif(img_path: str , output_path: str, resize_scale: float = 1.0):
 #     output_file = '.'.join(png.split('.')[:-1]) + '.gif'
 #     output_file = os.path.join(LIGHT_WAVES_DIR, output_file)
 #     convert_to_gif(input_file, output_file, 1)
+
+pngs = [png for png in os.listdir(PROJECTILES_DIR) if png.endswith('.png')]
+
+for png in pngs:
+    input_file = os.path.join(PROJECTILES_DIR, png)
+    output_file = '.'.join(png.split('.')[:-1]) + '.gif'
+    output_file = os.path.join(PROJECTILES_DIR, output_file)
+    convert_to_gif(input_file, output_file, 0.6)
