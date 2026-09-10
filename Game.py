@@ -13,11 +13,10 @@ TITLE    = "nAIvecRaft"
 WATER_BG = "#4779B2"
 COLLISION_TOLERANCE = 30
 
-PROJECTILES_DIR = os.path.join(os.path.abspath('./assets'), 'projectiles')
-
 class Game:
     MAX_LIVES         = 3
-    INVINCIBLE_FRAMES = 90          # 1.5 s at 60 fps
+    INVINCIBLE_FRAMES = 90
+    SCORE_PER_KILL    = 100
 
     def __init__(self, width: int = 1000, height: int = 1000):
         self._init_screen(width, height)
@@ -48,9 +47,7 @@ class Game:
         self._bind_events()
 
     def create_bullet(self):
-        x = self.player.x
-        y = self.player.top
-        self.bullets.add(x, y)
+        self.bullets.add(self.player.x, self.player.top)
 
     def _bind_events(self):
         self.win.listen()
@@ -78,7 +75,7 @@ class Game:
         if self.invincible_timer > 0:
             return
         for enemy in self.enemies.enemies:
-            if not enemy.is_visible(): # enemy shot
+            if not enemy.is_visible():
                 continue
             for bullet in self.bullets.bullets:
                 if bullet.is_collided_with(enemy):
@@ -91,6 +88,8 @@ class Game:
         self.explosions.add(enemy.x, enemy.y, enemy.speed)
         enemy.hide()
         self.bullets.remove([bullet])
+        self.score += self.SCORE_PER_KILL
+        self.hud.update(self.score, self.lives)
 
     def _on_hit(self):
         self.lives -= 1
@@ -105,17 +104,16 @@ class Game:
 
     def _tick_invincibility(self):
         if self.invincible_timer <= 0:
-            self.player.turtle.showturtle()
+            self.player.show()
             return
         self.invincible_timer -= 1
         if self.invincible_timer % 6 < 3:
             self.player.hide()
         else:
-            self.player.turtle.showturtle()
+            self.player.show()
 
     def play(self):
         while True:
-            print(f'{len(self.explosions.explosions)=}, {len(self.bullets.bullets)=}')
             if self.game_over:
                 self.win.update()
                 time.sleep(1 / 60)
@@ -129,6 +127,7 @@ class Game:
             self.enemies.move_down()
             self.player.vibrate()
             self.enemies.vibrate()
+            self.bullets.tick()
             self.bullets.move_up()
             self.bullets.clean()
             self.explosions.move_down()

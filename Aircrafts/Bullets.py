@@ -2,12 +2,22 @@ import turtle
 
 from .Bullet import Bullet
 
+FIRE_RATE = 10   # frames between shots (~0.5 s at 60 fps)
+
 class Bullets:
     def __init__(self, screen: turtle._Screen, bullets: list[Bullet] = None):
         self.screen = screen
         self.bullets = bullets or []
+        self._cooldown = 0
+
+    def tick(self):
+        if self._cooldown > 0:
+            self._cooldown -= 1
 
     def add(self, x: int, y: int):
+        if self._cooldown > 0:
+            return
+        self._cooldown = FIRE_RATE
         bullet = Bullet(self.screen, x, y)
         self.bullets.append(bullet)
 
