@@ -26,7 +26,7 @@ class Bullets:
     def clean(self):
         removed_bullets = []
         for bullet in self.bullets:
-            if bullet.y - 100 >= bullet.yboundary:
+            if bullet.y - bullet.hheight >= bullet.yboundary:
                 bullet.hide()
                 removed_bullets.append(bullet)
 
