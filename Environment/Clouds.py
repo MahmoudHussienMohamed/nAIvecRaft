@@ -1,5 +1,5 @@
 import os
-from Core.Environment import Environment
+from Core import Environment
 
 IMGS_DIR     = os.path.abspath('./assets')
 CLOUDS_DIR   = os.path.join(IMGS_DIR, 'environment', 'clouds')

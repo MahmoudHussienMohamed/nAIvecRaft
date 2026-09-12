@@ -9,14 +9,13 @@ class Environment(AnimationEntity):
             self, screen: turtle._Screen,
             imgs: tuple, count: int, speed: float, padding: int = 20
     ):
-        # Set screen first — screen_border_x/y and register_images need it
         self.screen  = screen
         self.speed   = speed
         self.padding = padding
         self.imgs    = imgs
         self.items   = []
 
-        self.register_images(imgs[0], imgs)  # inherited from AnimationEntity
+        self.register_images(imgs[0], imgs)
 
         self.width,  self.height  = Image.open(imgs[0]).size
         self.hwidth, self.hheight = self.width // 2, self.height // 2
@@ -33,8 +32,6 @@ class Environment(AnimationEntity):
             item.penup()
             item.goto(*position)
             self.items.append(item)
-
-    # --------------------------------------------------------- position logic
 
     def is_valid_position(self, x: float, y: float, ignore=None) -> bool:
         for other in self.items:
@@ -85,8 +82,6 @@ class Environment(AnimationEntity):
                 best_x = x
 
         return best_x, y
-
-    # ------------------------------------------------------ movement + hooks
 
     def _on_respawn(self, item):
         item.shape(random.choice(self.imgs))

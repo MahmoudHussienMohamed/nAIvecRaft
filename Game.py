@@ -1,12 +1,8 @@
 import time
 import turtle
-from Aircrafts.Bullet import Bullet
-from Environment.Clouds import Clouds
-from Aircrafts import Bullets, Enemy, Player, Enemies
-from Core.HUD import HUD
-from Environment.Lands import Lands
-from Environment.Explosions import Explosions
-from Environment.Waves import Waves
+from Core import HUD
+from Environment import Lands, Explosions, Waves, Clouds
+from Aircrafts import Bullet, Bullets, Enemy, Player, Enemies
 
 TITLE    = "nAIvecRaft"
 WATER_BG = "#4779B2"
