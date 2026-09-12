@@ -3,7 +3,7 @@ import turtle
 from Aircrafts.Bullet import Bullet
 from Environment.Cloud import Cloud
 from Aircrafts import Bullets, Enemy, Player, Enemies
-from HUD import HUD
+from Core.HUD import HUD
 from Environment.Land import Land
 from Environment.Explosions import Explosions
 from Environment.Wave import Wave
