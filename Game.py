@@ -1,12 +1,12 @@
 import time
 import turtle
 from Aircrafts.Bullet import Bullet
-from Environment.Cloud import Cloud
+from Environment.Clouds import Clouds
 from Aircrafts import Bullets, Enemy, Player, Enemies
 from Core.HUD import HUD
-from Environment.Land import Land
+from Environment.Lands import Lands
 from Environment.Explosions import Explosions
-from Environment.Wave import Wave
+from Environment.Waves import Waves
 
 TITLE    = "nAIvecRaft"
 WATER_BG = "#4779B2"
@@ -35,9 +35,9 @@ class Game:
         self.win.tracer(0)
 
     def setup(self):
-        self.waves   = Wave(self.win, 10)
-        self.land    = Land(self.win)
-        self.clouds  = Cloud(self.win, 5)
+        self.waves   = Waves(self.win, 10)
+        self.land    = Lands(self.win)
+        self.clouds  = Clouds(self.win, 5)
         self.enemies = Enemies(self.win, count=7)
         self.player  = Player(self.win, speed=8)
 

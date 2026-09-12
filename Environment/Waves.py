@@ -7,7 +7,7 @@ LIGHT_WAVES_DIR = os.path.join(IMGS_DIR, 'environment', 'waves', 'light')
 WAVE_FRAMES     = tuple(os.path.join(LIGHT_WAVES_DIR, f'_wave_frame_{i}.gif') for i in range(24))
 
 
-class Wave(Environment):
+class Waves(Environment):
     def __init__(self, screen, count: int = 20):
         self.fps = 10
         self.cnt = 0
