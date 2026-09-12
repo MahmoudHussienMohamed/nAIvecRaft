@@ -2,11 +2,10 @@ import os
 import turtle
 from math import sin
 from enum import Enum
-from .AnimationEntity import AnimationEntity
+from .AnimationEntity import AnimationEntity, SPEED
 
 IMGS_DIR = os.path.abspath('./assets')
 AIRCRAFTS_DIR = os.path.join(IMGS_DIR, 'aircrafts')
-SPEED = 5
 
 class Aircraft(AnimationEntity):
 
@@ -18,12 +17,11 @@ class Aircraft(AnimationEntity):
 
     def __init__(
             self, screen: turtle._Screen, imgs_dir: str, 
-            default_x: int = 0, default_y: int = -270, speed: int = SPEED, 
+            default_x: int = None, default_y: int = None, speed: int = SPEED, 
             xboundary: int = None, yboundary: int = None
     ):
         self.init_img_paths(imgs_dir)
         super().__init__(screen, self.normal, default_x, default_y, speed, xboundary, yboundary, self.get_shapes())
-        self.boundry = 270
         self.frame = 0
         self.init_lookups()
 

@@ -3,18 +3,17 @@ import random
 import turtle
 from PIL import Image
 from .Enemy import Enemy
-from Core import AIRCRAFTS_DIR, SPEED
+from Core import AnimationEntity, AIRCRAFTS_DIR, SPEED
 
 ENEMY_DIR  = 'enemy'
 _ENEMY_IMG = os.path.join(AIRCRAFTS_DIR, ENEMY_DIR)
 
-class Enemies:
+class Enemies(AnimationEntity):
     def __init__(self, screen: turtle._Screen, count: int = 5, speed: int = SPEED):
         self.screen  = screen
         self.speed   = speed
         self.enemies: list[Enemy] = []
         self.padding = 30
-
         self.width, self.height = Image.open(os.path.join(_ENEMY_IMG, 'normal.gif')).size
         self.min_x = self.width  + self.padding
         self.min_y = self.height + self.padding
@@ -43,18 +42,18 @@ class Enemies:
 
     def find_valid_position(self):
         for _ in range(5000):
-            x = random.randint(-500 + self.width // 2, 500 - self.width // 2)
-            y = random.randint(self.height // 2, 500 - self.height // 2)
+            x = random.randint(-self.screen_border_x + self.width // 2, self.screen_border_x - self.width // 2)
+            y = random.randint(self.height // 2, self.screen_border_y - self.height // 2)
             if self.is_valid_position(x, y):
                 return x, y
         return None
 
     def find_spawn_position(self, enemy: Enemy):
-        min_x = -500 + self.width // 2
-        max_x =  500 - self.width // 2
+        min_x = -self.screen_border_x + self.width // 2
+        max_x =  self.screen_border_x - self.width // 2
 
         for y in range(
-            500 + self.height // 2 + self.padding,
+            self.screen_border_y + self.height // 2 + self.padding,
             1000,
             max(1, self.min_y // 2)
         ):
@@ -65,7 +64,7 @@ class Enemies:
 
         highest_y = max(
             (e.y for e in self.enemies if e is not enemy),
-            default=500
+            default=self.screen_border_y
         )
         y = highest_y + self.min_y + self.padding
 
@@ -83,14 +82,14 @@ class Enemies:
         return best_x, y
 
     def move_down(self):
-        min_x = -500 + self.width // 2
-        max_x =  500 - self.width // 2
+        min_x = -self.screen_border_x + self.width // 2
+        max_x =  self.screen_border_x - self.width // 2
 
         for enemy in self.enemies:
             enemy.frame += 1
             y = enemy.y - enemy.speed
 
-            if y + self.height // 2 < -500:
+            if y + self.height // 2 < -self.screen_border_y:
                 if not enemy.is_visible(): # enemy shot
                     enemy.show()
                 x, spawn_y = self.find_spawn_position(enemy)

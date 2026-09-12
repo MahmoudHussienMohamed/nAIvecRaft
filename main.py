@@ -1,5 +1,6 @@
 from Game import Game
 
-game = Game()
-game.setup()
-game.play()
+if __name__ == '__main__':
+    game = Game(1440, 720)
+    game.setup()
+    game.play()

@@ -6,7 +6,7 @@ PLAYER_DIR = 'player'
 
 class Player(Aircraft):
     def __init__(self, screen: turtle._Screen, imgs_dir: str = PLAYER_DIR, speed: int = SPEED):
-        super().__init__(screen, imgs_dir, default_x=0, default_y=-270, speed=speed)
+        super().__init__(screen, imgs_dir, speed=speed)
 
     def init_img_paths(self, imgs_dir: str = PLAYER_DIR):
         super().init_img_paths(imgs_dir)

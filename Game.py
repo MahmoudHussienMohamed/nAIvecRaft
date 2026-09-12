@@ -37,7 +37,7 @@ class Game:
         self.enemies = Enemies(self.win, count=7)
         self.player  = Player(self.win, speed=8)
 
-        self.hud = HUD(max_lives=self.MAX_LIVES)
+        self.hud = HUD(self.win, max_lives=self.MAX_LIVES)
         self.hud.update(self.score, self.lives)
 
         self._bind_events()

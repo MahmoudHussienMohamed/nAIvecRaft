@@ -1,10 +1,12 @@
 import turtle
 from PIL import Image
 
+SPEED = 5
+
 class AnimationEntity:
     def __init__(
             self, screen: turtle._Screen, img_path: str, 
-            default_x: int, default_y: int, speed: int,
+            default_x: int = None, default_y: int = None, speed: int = SPEED,
             xboundary: int = None, yboundary: int = None,
             possible_images: list[str] = None, padding: int = 10
     ):
@@ -21,13 +23,13 @@ class AnimationEntity:
         for img in imgs:
             self.screen.register_shape(img)
 
-    def init_turtle(self, default_x: int, default_y: int):
-        self.defx = default_x
-        self.defy = default_y
+    def init_turtle(self, default_x: int = None, default_y: int = None):
+        self.defx = default_x if default_x is not None else 0
+        self.defy = default_y if default_y is not None else -(20 + self.screen_border_y // 2)
         self.turtle = turtle.Turtle()
         self.turtle.speed(0)
         self.turtle.penup()
-        self.goto(default_x, default_y)
+        self.goto(self.defx, self.defy)
 
     def get_current_image(self):
         return self.turtle.shape()

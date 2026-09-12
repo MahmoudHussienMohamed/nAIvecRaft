@@ -8,8 +8,8 @@ class Enemy(Aircraft):
     def __init__(
             self, screen: turtle._Screen,
             imgs_dir: str  = ENEMY_DIR,
-            default_x: int = 0,
-            default_y: int = 270,
+            default_x: int = None,
+            default_y: int = None,
             speed: int     = SPEED
     ):
         super().__init__(screen, imgs_dir, default_x=default_x, default_y=default_y, speed=speed)
