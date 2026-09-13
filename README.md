@@ -1,6 +1,6 @@
-# nAIveCraft ✈️
+# nAIvecRaft ✈️
 
-A 2D top-down pixel-art airplane shooter built with Python and Turtle graphics.
+> **naive** + **aircraft** — a 2D top-down pixel-art airplane shooter built entirely with Python and Turtle graphics, with all visual assets generated using AI tools.
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Pillow](https://img.shields.io/badge/Pillow-required-green)
@@ -99,17 +99,24 @@ Pillow
 
 ---
 
-## Asset Preprocessing
+## Asset Pipeline
 
-All sprites must be in **GIF format** for Turtle to load them.  
-If you are adding or replacing assets (PNG/JPEG), convert them first:
+All sprites were created through the following pipeline:
+
+| Step | Tool | Purpose |
+|------|------|---------|
+| 1 | [ChatGPT](https://chat.openai.com) / [Gemini](https://gemini.google.com) | Generate pixel-art sprites (aircraft, bullets, waves, clouds, lands, explosions) |
+| 2 | [Photoroom](https://www.photoroom.com/tools/background-remover) | Remove backgrounds to get clean transparent PNGs |
+| 3 | `Preprocessing/convertion.py` | Batch-convert PNGs → transparent GIFs for Turtle compatibility |
+| 4 | [Ezgif](https://ezgif.com/) | Manual fallback for GIF conversion and resizing when `convertion.py` produces incorrect results |
+
+### Running the preprocessor
 
 ```bash
 python Preprocessing/convertion.py
 ```
 
-This converts every image under `assets/` to a transparent GIF in-place.  
-Pre-converted GIFs are included in the repo, so this step is only needed when adding new assets.
+Pre-converted GIFs are already included in the repo — this step is only needed when adding or replacing assets.
 
 ---
 
