@@ -6,6 +6,8 @@
 ![Pillow](https://img.shields.io/badge/Pillow-required-green)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
+![Demo](assets/demo.gif)
+
 ---
 
 ## Gameplay
@@ -50,6 +52,7 @@ nAIveCraft/
 │   └── convertion.py        # Converts PNG assets → GIF for Turtle compatibility
 │
 └── assets/
+    ├── demo.gif             # Gameplay demo
     ├── aircrafts/
     │   ├── player/          # normal.gif, left1.gif, left2.gif, right1.gif, right2.gif
     │   └── enemy/           # normal.gif, left.gif, right.gif
